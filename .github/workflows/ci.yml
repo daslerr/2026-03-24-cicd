@@ -22,9 +22,18 @@ jobs:
     runs-on: windows-latest
     steps:
       - run: echo "goodbye"
+  
+  lint:
+    name: run linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - uses: astral-sh/ruff-action@v3
 
   test:
     name: Test the python package
+    needs: lint
     runs-on: ${{matrix.platform}}
     strategy:
       matrix:
