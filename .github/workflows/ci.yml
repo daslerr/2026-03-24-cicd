@@ -1,30 +1,36 @@
 name: My CI workflow
 
 on:
-    push:
+  push:
 
 jobs:
-    hello:
-        name: My Hello job
-        runs-on: ubuntu-latest
-        steps:
-            - name: Print Hello
-              run: echo "Hello World"
-            - name: Second step
-              run: echo "second"
+	hello:
+		name: My Hello job
+		runs-on: ubuntu-latest
+		steps:
+			- name: Print Hello
+				run: echo "Hello World"
+			- name: Second step
+				run: echo "second"
+			
+	goodbye:
+		name: My Goodbye job
+		needs: hello
+		runs-on: windows-latest
+		steps:
+			- run: echo "goodbye"
 
-    goodbye:
-        name: My Goodbye job
-        needs: hello
-        runs-on: windows-latest
-        steps:
-            - run: echo "goodbye"
-
-    test:
-        name: Test the python package
-        runs-on: ubuntu-latest
-        steps:
-            - name: Install the package
-              run: pip install .[test]
-            - name: Run the tests
-              run: pytest -vv
+	test:
+		name: Test the python package
+			runs-on: ubuntu-latest
+			steps: 
+				- name: Checkout repo
+					uses: actions/checkout@v6
+				- name: Set up python
+					uses: actions/setup-python@v6
+					with:
+						python-version: 3.10
+				- name: Install the package
+					run: pip install .[test]
+				- name: Run the tests
+					run: pytest -vv
