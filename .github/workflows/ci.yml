@@ -12,9 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Hello
-        run: echo "Hello World"
+        id: hello-step
+        run: |
+          echo "Hello World"
+          echo "message='My message'" >> $GITHUB_OUTPUT
       - name: Second step
-        run: echo "second"
+        run: |
+          echo "second"
+          echo ${{steps.hello-step.outputs.message}}
       
   goodbye:
     name: My Goodbye job
@@ -45,5 +50,7 @@ jobs:
       - if: matrix.python-version == '3.14'
         name: conditional step
         run: echo "Using python 3.14"
+      - if: runner.os == 'Linux'
+        run: echo "This is linux"
       - name: Run the tests
         run: pytest -vv
